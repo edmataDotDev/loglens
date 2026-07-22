@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Loglens CLI program to iterate NGINX access.log"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic>=2.13.4",
+]

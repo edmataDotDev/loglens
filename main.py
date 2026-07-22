@@ -1,4 +1,7 @@
 import argparse
+from pydantic import BaseModel, field_validator
+from datetime import datetime
+
 parser = argparse.ArgumentParser(prog="loglens")
 sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -30,6 +33,31 @@ p_stats.add_argument("--window", type=str)
 
 args = parser.parse_args()
 
+# Validators
+
+class LogEntry(BaseModel):
+    ip: str
+    identd: str
+    user_auth: str
+    timestamp: datetime
+    request: str
+    status: int
+    bytes: int
+    referer: str
+    user_agent: str
+
+    @field_validator("timestamp", mode="before")
+    @classmethod
+    def parse_date(cls, value: str):
+        return datetime.strptime(
+            value,
+            "%d/%m/%Y"
+        ).date()
+
+def readLine(file):
+    with open(file) as log:
+        for logLine in log:
+            yield logLine
 
 def main():
     print("hello world")
